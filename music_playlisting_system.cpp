@@ -1,4 +1,5 @@
 #include <iostream>
+#include<bits/stdc++.h>
 #include <vector>
 #include <string>
 #include <algorithm>
@@ -7,12 +8,13 @@
 #include <ctime>
 #include <sstream>
 #include <map>
+using namespace std;
 
-class song {
+class Song {
     public:
     string title, artist;
 
-    song(string t, string a) {
+    Song(string t, string a) {
         title = t;
         artist = a;
     }
@@ -22,10 +24,10 @@ class Playlist {
 public:
 vector<Song> songs;
 void addSong(string name, string artist){
-    songs.push_back(name, artist);
-    cout<<"Song added: "<<name<<" "<<by<<artist<<endl;
+    songs.emplace_back(name, artist);
+    cout<<"Song added: "<<name<<" by "<<artist<<endl;
 }
-void remove(string title){
+void removeSong(string title){
     auto it = remove_if(songs.begin(), songs.end(), [&title](const Song& song) {
             return song.title == title;
         });
@@ -37,7 +39,7 @@ void remove(string title){
             cout << "Song not found: " << title << endl;
         }
 }
-void displaysongs()
+void displaySongs()
 {
     if(songs.empty()) cout<<"Playlist is empty"<<endl;
     else {
@@ -48,39 +50,41 @@ void displaysongs()
     }
 }
 
-    void searchSong(string kuja){
+    void searchSong(const string& khuja){
         bool found = false;
-        for (auto& song : khuja) {
+        for (auto& song : songs) {
             if (song.title.find(khuja) != string::npos || song.artist.find(khuja) != string::npos) {
-                cout << "Found: " << song.title << " by " << song.artist << khuja;
+                cout << "Found: " << song.title << " by " << song.artist << endl;
                 found = true;
             }
         }
 
         if (!found) {
-cout << "No songs found matching: " << khuja << "\n";
+            cout << "No songs found matching: " << khuja << "\n";
         }
     }
-void PlaySong(string kuja){
+
+void playSong(string kuja){
         bool found = false;
-        for (auto& song : khuja) {
-            if (song.title.find(khuja) != string::npos || song.artist.find(khuja) != string::npos) {
-                cout << "Playing " << song.title << " by " << song.artist << khuja;
+        for (auto& song : songs) {
+            if (song.title.find(kuja) != string::npos || song.artist.find(kuja) != string::npos) {
+                cout << "Playing " << song.title << " by " << song.artist << " " << kuja << endl;
                 found = true;
             }
         }
 
         if (!found) {
-cout << "No songs found matching: " << khuja << "\n";
+            cout << "No songs found matching: " << kuja << "\n";
         }
     }
 
-void Shuffle(){
+void shufflePlaylist() {
     srand(time(0));
     random_shuffle(songs.begin(),songs.end());
     cout<<"Playlist Shufflet"<<endl;
 }
-void savePlaylist(string filename){
+
+void savePlaylistSongs(string filename){
     ofstream play_list_save(filename);
     if(!play_list_save){
         cout<<"Error"<<endl;
@@ -100,7 +104,7 @@ cout<<"Playlist saved to"<<filename<<endl;
 
         songs.clear();
         string title, artist;
-        while (getline(inFile, title) && getline(inFile, artist)) {
+        while (getline(infile, title) && getline(infile, artist)) {
             songs.emplace_back(title, artist);
         }
 
@@ -109,11 +113,12 @@ cout<<"Playlist saved to"<<filename<<endl;
 };
 
 class PlaylistManager{
+    public:
     map<string, Playlist> playlists;
   //  map<string, Playlsit> playlists;
   void createPlaylist(const string& name) {
   //  ofstream play_list;
-        play_list.open("playlistdata.txt", ios::app);
+//play_list.open("playlistdata.txt", ios::app);
         if (playlists.find(name) == playlists.end()) {
             playlists[name] = Playlist();
             cout << "Playlist created: " << name << endl;
@@ -125,7 +130,7 @@ class PlaylistManager{
 
     }
 
-  void deletePlaylist(const std::string& name) {
+  void deletePlaylist(const string& name) {
 
         if (playlists.erase(name)) {
             std::cout << "Playlist deleted: " << name << "\n";
@@ -154,6 +159,28 @@ class PlaylistManager{
             }
         }
     }
+
+    void savePlaylist(const string& playlistName, const string& filename) {
+        auto it = playlists.find(playlistName);
+        if (it == playlists.end()) {
+            cout << "Playlist not found: " << playlistName << endl;
+            return;
+        }
+
+        ofstream play_list_save(filename);
+        if (!play_list_save) {
+            cout << "Error opening file: " << filename << endl;
+            return;
+        }
+
+        play_list_save << "Playlist: " << playlistName << endl;
+        for (const auto& song : it->second.songs) {
+            play_list_save << song.title << " " << song.artist << endl;
+        }
+
+        cout << "Playlist " << playlistName << " saved to " << filename << endl;
+    }
+
 };
 
 int main()
@@ -168,50 +195,52 @@ int main()
         cout<<"1. Create playlist"<<endl;
                 cout<<"2. Delete playlist"<<endl;
         cout<<"3. List playlist"<<endl;
-        cout<<"4. Managae playlist"<<endl;
-        cout<<"5. exit"<<endl;
-cout<<"enter yo cjoice"<<endl;
+        cout<<"4. Manage playlist"<<endl;
+        cout<<"5. Save Playlist"<<endl;
+        cout<<"6. Exit"<<endl;
+cout<<"Enter your choice : ";
 cin>>choice;
 cin.ignore();
 
 switch(choice){
 
     case 1:
-    cout<<"enteer playlist name : ";
+    cout<<"Enter Playlist Name : ";
     getline(cin, playlistName);
     manager.createPlaylist(playlistName);
     break;
     case 2:
-    cout<<"enter playlist anem to del ";
+    cout<<"Enter Playlist Name to Delete ";
     getline(cin, playlistName);
     manager.deletePlaylist(playlistName);
     break;
     case 3:
-    maanger.listPlaylists();
+    cout<<"Here are The List of Playlists :"<<endl;
+    manager.listPlaylists();
     break;
     case 4:
-    cout<<"enter playlist name to manage :";
+    cout<<"Enter Playlist Name to Manage :";
     getline(cin, playlistName);
     {
         Playlist* playlist = manager.getPlaylist(playlistName);
         if(playlist){
             int choice1;
             do{
-                cout<<"manage yo plalist"<<endl;
-                cout<<"1. add song"<<endl;
-                 cout<<"2. remove"<<endl;
-  cout<<"3. display songs"<<endl;
-                 cout<<"4. search song"<<endl;
-                cout<<"5. play song"<<endl;
-                 cout<<"6. shuffle song"<<endl;
-                cout<<"7. save "<<endl;
-                 cout<<"8. load song"<<endl;
-              cout<<"9. back to mainmenu"<<endl;
-              cout<<"enter your choice"<<;
+                cout<<"Manage your playlist"<<endl;
+                cout<<"1. Add a song"<<endl;
+                 cout<<"2. Remove a song"<<endl;
+  cout<<"3. Display songs"<<endl;
+                 cout<<"4. Search song"<<endl;
+                cout<<"5. Play song"<<endl;
+                 cout<<"6. Shuffle song"<<endl;
+                cout<<"7. Save Playlist "<<endl;
+                 cout<<"8. Load songs"<<endl;
+              cout<<"9. Back to mainmenu"<<endl;
+              cout<<"Enter your choice";
               cin>>choice1;
               cin.ignore();
 
-              switch (subChoice) {
+              switch (choice1) {
                         case 1:
                             cout << "Enter song title: ";
                             getline(std::cin, title);
@@ -225,7 +254,7 @@ switch(choice){
                             playlist->removeSong(title);
                             break;
                         case 3:
-                            playlist->displayPlaylist();
+                            playlist->displaySongs();
                             break;
                         case 4:
                             cout << "Enter title or artist to search: ";
@@ -243,7 +272,7 @@ switch(choice){
                         case 7:
                             cout << "Enter filename to save playlist: ";
                             getline(std::cin, filename);
-                            playlist->savePlaylist(filename);
+                            playlist->savePlaylistSongs(filename);
                             break;
                         case 8:
                             cout << "Enter filename to load playlist: ";
@@ -256,24 +285,20 @@ switch(choice){
                         default:
                             cout << "Invalid choice. Try again."<<endl;
                         }
-                    } while (subChoice != 9);
+             } while (choice1 != 9);
                 }
-            }
-            break;
+    }  
         case 5:
-            std::cout << "Exiting...\n";
+            cout << "saved"<<endl;
             break;
+        case 6:
+        cout<<"bye bye"<<endl;
+        break;
         default:
-            std::cout << "Invalid choice. Try again.\n";
+            cout << "Invalid choice. Try again.\n";
         }
-    } while (choice != 5);
+    } while (choice != 6);
 
     return 0;
-        }
-    }
-}
-
-
-
-    }
+        
 }
