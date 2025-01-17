@@ -115,82 +115,18 @@ cout<<"Playlist saved to"<<filename<<endl;
 class PlaylistManager{
     public:
     map<string, Playlist> playlists;
-  //  map<string, Playlsit> playlists;
-  void createPlaylist(const string& name) {
-  //  ofstream play_list;
-//play_list.open("playlistdata.txt", ios::app);
-        if (playlists.find(name) == playlists.end()) {
-            playlists[name] = Playlist();
-            cout << "Playlist created: " << name << endl;
-          //  play_list<<name<<'\t';
-        } else {
-            cout << "Playlist already exists: " << name << endl;
-        }
-
-
+      void conti(){
+        string xx;
+        cout<<endl<<endl<<"\t\t\tPress Any Key To Continue : ";
+        cin>>xx;
+        system("cls");
+        options();
     }
-
-  void deletePlaylist(const string& name) {
-
-        if (playlists.erase(name)) {
-            std::cout << "Playlist deleted: " << name << "\n";
-        } else {
-            std::cout << "Playlist not found: " << name << "\n";
-        }
-    }
-
-    Playlist* getPlaylist(const std::string& name) {
-        auto it = playlists.find(name);
-        if (it != playlists.end()) {
-            return &it->second;
-        } else {
-            std::cout << "Playlist not found: " << name << "\n";
-            return nullptr;
-        }
-    }
-
-    void listPlaylists() const {
-        if (playlists.empty()) {
-            std::cout << "No playlists available.\n";
-        } else {
-            std::cout << "Available Playlists:\n";
-            for (const auto& pair : playlists) {
-                std::cout << "- " << pair.first << "\n";
-            }
-        }
-    }
-
-    void savePlaylist(const string& playlistName, const string& filename) {
-        auto it = playlists.find(playlistName);
-        if (it == playlists.end()) {
-            cout << "Playlist not found: " << playlistName << endl;
-            return;
-        }
-
-        ofstream play_list_save(filename);
-        if (!play_list_save) {
-            cout << "Error opening file: " << filename << endl;
-            return;
-        }
-
-        play_list_save << "Playlist: " << playlistName << endl;
-        for (const auto& song : it->second.songs) {
-            play_list_save << song.title << " " << song.artist << endl;
-        }
-
-        cout << "Playlist " << playlistName << " saved to " << filename << endl;
-    }
-
-};
-
-int main()
-{
-    PlaylistManager manager;
-
-    int choice;
+    void options()
+    {
+int choice;
     string playlistName, title, artist, query, filename;
 
-    do{
         cout<<"Music playlist management system"<<endl;
         cout<<"1. Create playlist"<<endl;
                 cout<<"2. Delete playlist"<<endl;
@@ -205,24 +141,30 @@ cin.ignore();
 switch(choice){
 
     case 1:
+    system("cls");
     cout<<"Enter Playlist Name : ";
     getline(cin, playlistName);
-    manager.createPlaylist(playlistName);
+    createPlaylist(playlistName);
     break;
     case 2:
+        system("cls");
     cout<<"Enter Playlist Name to Delete ";
     getline(cin, playlistName);
-    manager.deletePlaylist(playlistName);
+    deletePlaylist(playlistName);
     break;
     case 3:
+        system("cls");
+
     cout<<"Here are The List of Playlists :"<<endl;
-    manager.listPlaylists();
+    listPlaylists();
     break;
     case 4:
+        system("cls");
+
     cout<<"Enter Playlist Name to Manage :";
     getline(cin, playlistName);
     {
-        Playlist* playlist = manager.getPlaylist(playlistName);
+        Playlist* playlist = getPlaylist(playlistName);
         if(playlist){
             int choice1;
             do{
@@ -289,15 +231,98 @@ switch(choice){
                 }
     }  
         case 5:
+            system("cls");
+
             cout << "saved"<<endl;
             break;
         case 6:
+            system("cls");
+
         cout<<"bye bye"<<endl;
         break;
         default:
             cout << "Invalid choice. Try again.\n";
         }
-    } while (choice != 6);
+
+
+    }
+    
+
+  //  map<string, Playlsit> playlists;
+  void createPlaylist(const string& name) {
+  //  ofstream play_list;
+//play_list.open("playlistdata.txt", ios::app);
+        if (playlists.find(name) == playlists.end()) {
+            playlists[name] = Playlist();
+            cout << "Playlist created: " << name << endl;
+          //  play_list<<name<<'\t';
+        } else {
+            cout << "Playlist already exists: " << name << endl;
+        }
+        conti();
+    }
+
+  void deletePlaylist(const string& name) {
+
+        if (playlists.erase(name)) {
+            std::cout << "Playlist deleted: " << name << "\n";
+        } else {
+            std::cout << "Playlist not found: " << name << "\n";
+        }
+        conti();
+    }
+
+    Playlist* getPlaylist(const std::string& name) {
+        auto it = playlists.find(name);
+        if (it != playlists.end()) {
+            return &it->second;
+        } else {
+            std::cout << "Playlist not found: " << name << "\n";
+            return nullptr;
+        }
+    }
+
+    void listPlaylists()  {
+        if (playlists.empty()) {
+            std::cout << "No playlists available.\n";
+        } else {
+            std::cout << "Available Playlists:\n";
+            for (const auto& pair : playlists) {
+                std::cout << "- " << pair.first << "\n";
+            }
+        }
+    conti();
+    }
+
+    void savePlaylist(const string& playlistName, const string& filename) {
+        auto it = playlists.find(playlistName);
+        if (it == playlists.end()) {
+            cout << "Playlist not found: " << playlistName << endl;
+            return;
+        }
+
+        ofstream play_list_save(filename);
+        if (!play_list_save) {
+            cout << "Error opening file: " << filename << endl;
+            return;
+        }
+
+        play_list_save << "Playlist: " << playlistName << endl;
+        for (const auto& song : it->second.songs) {
+            play_list_save << song.title << " " << song.artist << endl;
+        }
+
+        cout << "Playlist " << playlistName << " saved to " << filename << endl;
+        
+    }
+
+};
+
+int main()
+{
+    PlaylistManager manager;
+
+    manager.options();
 
     return 0;
         
