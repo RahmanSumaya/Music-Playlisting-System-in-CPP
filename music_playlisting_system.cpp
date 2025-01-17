@@ -98,7 +98,7 @@ cout<<"Playlist saved to"<<filename<<endl;
     void loadPlaylist(string filename){
         ifstream infile(filename);
         if(!infile){
-            cerr<<"error ,oadinf"<<endl;
+            cerr<<"error loading"<<endl;
             return;
         }
 
@@ -122,6 +122,84 @@ class PlaylistManager{
         system("cls");
         options();
     }
+     
+    
+    void options1(Playlist* playlist) {
+            int choice1;
+            string title, artist, query, filename;
+
+            cout << "Manage your playlist" << endl;
+            cout << "1. Add a song" << endl;
+            cout << "2. Remove a song" << endl;
+            cout << "3. Display songs" << endl;
+            cout << "4. Search song" << endl;
+            cout << "5. Play song" << endl;
+            cout << "6. Shuffle song" << endl;
+            cout << "7. Save Playlist " << endl;
+            cout << "8. Load songs" << endl;
+            cout << "9. Back to main menu" << endl;
+            cout << "Enter your choice: ";
+            cin >> choice1;
+            cin.ignore();
+
+            switch (choice1) {
+                case 1:
+                system("cls");
+                    cout << "Enter song title: ";
+                    getline(std::cin, title);
+                    cout << "Enter artist: ";
+                    getline(std::cin, artist);
+                    playlist->addSong(title, artist);
+                    conti1(playlist);
+                    break;
+                case 2:
+                system("cls");
+
+                    cout << "Enter song title to remove: ";
+                    getline(std::cin, title);
+                    playlist->removeSong(title);
+                    conti1(playlist);
+                    break;
+                case 3:
+                    playlist->displaySongs();
+                    break;
+                case 4:
+                    cout << "Enter title or artist to search: ";
+                    getline(std::cin, query);
+                    playlist->searchSong(query);
+                    break;
+                case 5:
+                    cout << "Enter song title to play: ";
+                    getline(std::cin, title);
+                    playlist->playSong(title);
+                    break;
+                case 6:
+                    playlist->shufflePlaylist();
+                    break;
+                case 7:
+                    cout << "Enter filename to save playlist: ";
+                    getline(std::cin, filename);
+                    playlist->savePlaylistSongs(filename);
+                    break;
+                case 8:
+                    cout << "Enter filename to load playlist: ";
+                    getline(std::cin, filename);
+                    playlist->loadPlaylist(filename);
+                    break;
+                case 9:
+                    cout << "Returning to main menu..." << endl;
+                    break;
+                default:
+                    cout << "Invalid choice. Try again." << endl;
+            }
+        }
+       void conti1(Playlist* playlist){
+        string xx;
+        cout<<endl<<endl<<"\t\t\tPress Any Key To Continue : ";
+        cin>>xx;
+        system("cls");
+       options1(playlist);
+    } 
     void options()
     {
 int choice;
@@ -132,8 +210,7 @@ int choice;
                 cout<<"2. Delete playlist"<<endl;
         cout<<"3. List playlist"<<endl;
         cout<<"4. Manage playlist"<<endl;
-        cout<<"5. Save Playlist"<<endl;
-        cout<<"6. Exit"<<endl;
+        cout<<"5. Exit"<<endl;
 cout<<"Enter your choice : ";
 cin>>choice;
 cin.ignore();
@@ -164,78 +241,10 @@ switch(choice){
     cout<<"Enter Playlist Name to Manage :";
     getline(cin, playlistName);
     {
-        Playlist* playlist = getPlaylist(playlistName);
-        if(playlist){
-            int choice1;
-            do{
-                cout<<"Manage your playlist"<<endl;
-                cout<<"1. Add a song"<<endl;
-                 cout<<"2. Remove a song"<<endl;
-  cout<<"3. Display songs"<<endl;
-                 cout<<"4. Search song"<<endl;
-                cout<<"5. Play song"<<endl;
-                 cout<<"6. Shuffle song"<<endl;
-                cout<<"7. Save Playlist "<<endl;
-                 cout<<"8. Load songs"<<endl;
-              cout<<"9. Back to mainmenu"<<endl;
-              cout<<"Enter your choice";
-              cin>>choice1;
-              cin.ignore();
-
-              switch (choice1) {
-                        case 1:
-                            cout << "Enter song title: ";
-                            getline(std::cin, title);
-                            cout << "Enter artist: ";
-                            getline(std::cin, artist);
-                            playlist->addSong(title, artist);
-                            break;
-                        case 2:
-                            cout << "Enter song title to remove: ";
-                            getline(std::cin, title);
-                            playlist->removeSong(title);
-                            break;
-                        case 3:
-                            playlist->displaySongs();
-                            break;
-                        case 4:
-                            cout << "Enter title or artist to search: ";
-                            getline(std::cin, query);
-                            playlist->searchSong(query);
-                            break;
-                        case 5:
-                            cout << "Enter song title to play: ";
-                            getline(std::cin, title);
-                            playlist->playSong(title);
-                            break;
-                        case 6:
-                            playlist->shufflePlaylist();
-                            break;
-                        case 7:
-                            cout << "Enter filename to save playlist: ";
-                            getline(std::cin, filename);
-                            playlist->savePlaylistSongs(filename);
-                            break;
-                        case 8:
-                            cout << "Enter filename to load playlist: ";
-                            getline(std::cin, filename);
-                            playlist->loadPlaylist(filename);
-                            break;
-                        case 9:
-                            cout << "Returning to main menu..."<<endl;
-                            break;
-                        default:
-                            cout << "Invalid choice. Try again."<<endl;
-                        }
-             } while (choice1 != 9);
-                }
+       options1(&playlists[playlistName]);
     }  
+        break;
         case 5:
-            system("cls");
-
-            cout << "saved"<<endl;
-            break;
-        case 6:
             system("cls");
 
         cout<<"bye bye"<<endl;
@@ -294,27 +303,6 @@ switch(choice){
     conti();
     }
 
-    void savePlaylist(const string& playlistName, const string& filename) {
-        auto it = playlists.find(playlistName);
-        if (it == playlists.end()) {
-            cout << "Playlist not found: " << playlistName << endl;
-            return;
-        }
-
-        ofstream play_list_save(filename);
-        if (!play_list_save) {
-            cout << "Error opening file: " << filename << endl;
-            return;
-        }
-
-        play_list_save << "Playlist: " << playlistName << endl;
-        for (const auto& song : it->second.songs) {
-            play_list_save << song.title << " " << song.artist << endl;
-        }
-
-        cout << "Playlist " << playlistName << " saved to " << filename << endl;
-        
-    }
 
 };
 
