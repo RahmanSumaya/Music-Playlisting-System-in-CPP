@@ -33,17 +33,15 @@ void addSong(string name, string artist){
     cout<<endl<<"\t\t\tSong added: "<<name<<" by "<<artist<<endl;
 }
 void removeSong(string title){
-    lines();
-
     auto it = remove_if(songs.begin(), songs.end(), [&title](const Song& song) {
             return song.title == title;
         });
 
         if (it != songs.end()) {
             songs.erase(it, songs.end());
-            cout<<endl<<endl<<"\t\t\tSong removed: " << title << endl;
+            cout<<"\t\t\tSong removed: " << title << endl;
         } else {
-            cout<<endl<<endl<<"\t\t\tSong not found: " << title << endl;
+            cout<<"\t\t\tSong not found: " << title << endl;
         }
 }
 void displaySongs()
@@ -60,7 +58,7 @@ void displaySongs()
 }
 
     void searchSong(const string& khuja){
-        lines();
+        
         bool found = false;
         for (auto& song : songs) {
             if (song.title.find(khuja) != string::npos || song.artist.find(khuja) != string::npos) {
@@ -75,11 +73,11 @@ void displaySongs()
     }
 
 void playSong(string kuja){
-    lines();
+    
         bool found = false;
         for (auto& song : songs) {
             if (song.title.find(kuja) != string::npos || song.artist.find(kuja) != string::npos) {
-                cout<<endl<<endl<<"\t\t\tPlaying " << song.title << " by " << song.artist << " " << kuja << endl;
+                cout<<"\t\t\tPlaying " << song.title << " by " << song.artist << " " << kuja << endl;
                 found = true;
             }
         }
@@ -96,7 +94,7 @@ void shufflePlaylist() {
 }
 
 void savePlaylistSongs(string filename){
-    lines();
+    
 
     ofstream play_list_save(filename);
     if(!play_list_save){
@@ -104,25 +102,32 @@ void savePlaylistSongs(string filename){
         return;
     }
     for(auto& song:songs){
-        play_list_save<<song.title<<" "<<song.artist<<endl;
+        play_list_save<<song.title<<","<<song.artist<<endl;
     }
-cout<<"\t\t\tPlaylist saved to"<<filename<<endl;
+cout<<endl<<"\t\t\tPlaylist saved to "<<filename<<endl;
 }
-    void loadPlaylist(string filename){
-        ifstream infile(filename);
-        if(!infile){
-            cerr<<"error loading"<<endl;
-            return;
-        }
-
-        songs.clear();
-        string title, artist;
-        while (getline(infile, title) && getline(infile, artist)) {
-            songs.emplace_back(title, artist);
-        }
-
-        cout<<endl<<endl<<"\t\t\tPlaylist loaded from " << filename << endl;
+   
+void loadPlaylist(string filename) {
+    ifstream infile(filename);
+    if (!infile) {
+        cerr << "Error loading file" << endl;
+        return;
     }
+
+    songs.clear();
+    string line, title, artist;
+    cout << endl << endl << "\t\t\tPlaylist loaded from " << filename << endl;
+
+    while (getline(infile, line)) {
+        stringstream ss(line);
+        if (getline(ss, title, ',') && getline(ss, artist)) {
+            songs.emplace_back(title, artist);
+            cout << "\t\t\t\tSong Name         : " << title << endl;
+            cout << "\t\t\t\tArtist Name       : " << artist << endl;
+            cout<<"\t\t\t\t--------------------------------------------------"<<endl;
+        }
+    }
+}
 };
 
 class PlaylistManager{
