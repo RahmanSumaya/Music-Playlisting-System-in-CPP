@@ -28,9 +28,9 @@ void lines(){
 }
 vector<Song> songs;
 void addSong(string name, string artist){
-    lines();
+    
     songs.emplace_back(name, artist);
-    cout<<endl<<endl<<"\t\t\tSong added: "<<name<<" by "<<artist<<endl;
+    cout<<endl<<"\t\t\tSong added: "<<name<<" by "<<artist<<endl;
 }
 void removeSong(string title){
     lines();
@@ -52,7 +52,7 @@ void displaySongs()
 
     if(songs.empty()) cout<<"Playlist is empty"<<endl;
     else {
-        cout<<"song list "<<endl;
+        cout<<"\t\t\tsong list "<<endl;
         for(auto& song:songs){
             cout<<"\t\t\t"<<song.title<<" by "<<song.artist<<endl;
         }
@@ -157,7 +157,7 @@ conti();
             int choice1;
             string title, artist, query, filename;
 
-            cout<<"\t\t\tManage your playlist" << endl;
+            cout<<endl<<"\t\t\tManage your playlist" << endl;
             cout<<"\t\t\t1. Add a song" << endl;
             cout<<"\t\t\t2. Remove a song" << endl;
             cout<<"\t\t\t3. Display songs" << endl;
@@ -174,6 +174,7 @@ conti();
             switch (choice1) {
                 case 1:
                 system("cls");
+                lines();
                     cout<<"\t\t\tEnter song title: ";
                     getline(std::cin, title);
                     cout<<"\t\t\tEnter artist: ";
@@ -262,7 +263,7 @@ conti();
     {
 int choice;
     string playlistName, title, artist, query, filename;
-
+lines();
         cout<<"\t\t\tMusic playlist management system"<<endl;
         cout<<"\t\t\t1. Create playlist"<<endl;
                 cout<<"\t\t\t2. Delete playlist"<<endl;
@@ -313,7 +314,8 @@ lines();
             system("cls");
 
         cout<<"\t\t\tThank You for Using My App"<<endl;
-        break;
+        exit(0);
+    
         default:
         lines();
 
@@ -328,6 +330,7 @@ lines();
   //  map<string, Playlsit> playlists;
   void createPlaylist(const string& name) {
   //  ofstream play_list;
+  
 //play_list.open("playlistdata.txt", ios::app);
         if (playlists.find(name) == playlists.end()) {
             playlists[name] = Playlist();
@@ -340,7 +343,7 @@ lines();
     }
 
   void deletePlaylist(const string& name) {
-
+lines();
         if (playlists.erase(name)) {
             cout<<"\t\t\tPlaylist deleted: " << name << "\n";
         } else {
@@ -360,6 +363,7 @@ lines();
     }
 
     void listPlaylists()  {
+        lines();
         if (playlists.empty()) {
             cout<<"\t\t\tNo playlists available.\n";
         } else {
