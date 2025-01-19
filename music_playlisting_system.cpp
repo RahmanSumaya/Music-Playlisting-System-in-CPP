@@ -141,7 +141,7 @@ lines();
         cout<<"\t\t\t**************************************"<<endl;
         cout<<"\t\t\t=                                    ="<<endl;
         cout<<"\t\t\t=              Welcome To            ="<<endl;
-        cout<<"\t\t\t=        To-Do List Application      ="<<endl;
+        cout<<"\t\t\t=  Music Playlist Management System  ="<<endl;
         cout<<"\t\t\t=                                    ="<<endl;
         cout<<"\t\t\t=                                    ="<<endl;
         cout<<"\t\t\t**************************************"<<endl;
